@@ -10,4 +10,6 @@ logs/
 *.log
 .env
 *.sqlite3
-*.txt
+tg_bot/token.txt
+tg_bot/file_with_names.txt
+tg_bot/access_list.txt
