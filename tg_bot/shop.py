@@ -1,6 +1,6 @@
 import datetime
 from datetime import datetime, timedelta, timezone
-from simple_function import make_date_to_db, is_num, replace_punkt_to_comma, from_list_to_str, with_db_connection
+from simple_function import make_date_to_db, is_num, replace_punkt_to_comma, from_list_to_str, with_db_connection, create_day_to_db
 
 
 def message_add(mes_text: str, user_id: int) -> bool:
@@ -90,7 +90,3 @@ def get_total_spent_in_shop(cursor, month: str, year = "2025"):
 
     result = cursor.fetchone()  # Получаем одну строку
     return result[0] if result[0] is not None else 0  # Если нет данных, вернуть 0
-
-
-########################################################################################################################
-#Выполняем тестовые запросы

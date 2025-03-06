@@ -1,5 +1,6 @@
 import sqlite3
 from functools import wraps
+from shop import add_shop
 
 
 #decorator
@@ -53,15 +54,19 @@ def make_date_to_db(month: str, year: str) -> list[str]:
     end_date = f"{year}-{month}-31 23:59:59"
     return [start_date, end_date]
 
+def create_day_to_db(month: int, day: int) -> str:
+    if day < 10:
+        day = f"0{day}"
+    else:
+        day = f"{day}"
+    return f"2025-0{month}-{day} 12:00:00"
 
-# def qwert(text):
-#     match = re.match(r"(\w+) (\d+,\d+) (\w+) id:(\d+)", text)
-#     print(match.group(0))
-#     print(match.group(1))
-#     print(match.group(2))
-#     print(match.group(3))
-#     print(match.group(4))
-#     return (match)
-#
-#
-# print(qwert("lidl 12,32 ca id:123456"))
+def manualy_add_to_db(array:list, month: int):
+    for cell in array:
+        add_shop(
+            shop_name=cell[0],
+            amount=cell[1],
+            money_from=cell[2],
+            customer_id=cell[3],
+            created_at=create_day_to_db(month=month, day=cell[4])
+        )
