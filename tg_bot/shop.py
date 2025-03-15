@@ -26,20 +26,20 @@ def message_shop(mes_text: str, user_id: int) -> str:
                         f"\ntotal = {get_total_spent_in_shop(month=message[2])}")
     return text_message
 
-'''
-#############################################################
-#           Use database injection                          #
-#############################################################
 
-Добавляем данные в таблицу
-add_shop(
-    shop_name="Name", Пишем имя магазина. удобней мелкими буквами.
-    amount=12.34, используем float тип данных
-    money_from="cash", на выбор "cash" or "card". Автоматически пищет карта
-    customer_id=123456, Берется id того кто пишет смс боту
-    created_at="2025-01-01 00:00:00" Если не указано дата, она ставится автоматически в данный момент
-)
-'''
+####################################################################################
+#           Use database injection                                                 #
+####################################################################################
+#
+# Добавляем данные в таблицу
+# add_shop(
+#     shop_name="Name", Пишем имя магазина. удобней мелкими буквами.
+#     amount=12.34, используем float тип данных
+#     money_from="cash", на выбор "cash" or "card". Автоматически пищет карта
+#     customer_id=123456, Берется id того кто пишет смс боту
+#     created_at="2025-01-01 00:00:00" Если не указано дата, она ставится автоматически в данный момент
+# )
+####################################################################################
 @with_db_connection()
 def add_shop(cursor, shop_name, amount, money_from, customer_id, created_at = None):
     # Получаем текущее время с учетом часового пояса
@@ -58,35 +58,37 @@ def get_shops(cursor):
     cursor.execute("SELECT * FROM bot_shop")  # Заменить bot_shop на имя своей таблицы
     return cursor.fetchall()
 
-
-'''Вывод всех магазинов и сумма денег потраченых в них.
-spending = get_spending_by_shop(month="02")
-year автоматом стоит 2025, при необходимости можно изменить.'''
+####################################################################################
+#Вывод всех магазинов и сумма денег потраченых в них.
+#spending = get_spending_by_shop(month="02")
+#year автоматом стоит 2025, при необходимости можно изменить.
+####################################################################################
 @with_db_connection()
 def get_spending_by_shop(cursor, month: str, year: str="2025"):
     start_date, end_date = make_date_to_db(month=month, year=year)
 
-    cursor.execute("""
+    cursor.execute('''
         SELECT shop, SUM(amount) AS total_spent
         FROM bot_shop
         WHERE created_at BETWEEN ? AND ?
         GROUP BY shop
         ORDER BY total_spent DESC;
-    """, (start_date, end_date))
+    ''', (start_date, end_date))
     return cursor.fetchall()  # Вернем список кортежей (shop, total_spent)
 
-
-'''get_total_spent_in_shop(month="03", year="2025")
-выводит сумму за весь месяц всех магазинов. Если нет никаких данных выводит 0'''
+####################################################################################
+# get_total_spent_in_shop(month="03", year="2025")
+# выводит сумму за весь месяц всех магазинов. Если нет никаких данных выводит 0
+####################################################################################
 @with_db_connection()
 def get_total_spent_in_shop(cursor, month: str, year = "2025"):
     start_date, end_date = make_date_to_db(month=month, year=year)
 
-    cursor.execute("""
+    cursor.execute('''
         SELECT SUM(amount) AS total_spent
         FROM bot_shop
         WHERE created_at BETWEEN ? AND ?;
-    """, (start_date, end_date))
+    ''', (start_date, end_date))
 
     result = cursor.fetchone()  # Получаем одну строку
     return result[0] if result[0] is not None else 0  # Если нет данных, вернуть 0

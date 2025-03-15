@@ -1,6 +1,6 @@
 import sqlite3
 from functools import wraps
-from shop import add_shop
+from shop import *
 
 
 #decorator

@@ -9,10 +9,6 @@ from poket import *
 
 bot = telebot.TeleBot(TOKEN)
 
-
-def auto(title: str, amount: float, km: int) -> None:
-    pass
-
 @bot.message_handler(func=lambda message: message.chat.id in ACCESS_LIST)
 def handle_messages(message):
     if message.text[0:3].lower() == "add":
