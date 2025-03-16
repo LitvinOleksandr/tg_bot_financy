@@ -2,6 +2,7 @@ import telebot
 import config
 import help
 import shop
+import info
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -19,6 +20,8 @@ def handle_messages(message):
         bot.send_message(message.chat.id, help.help_message(message.text))
     elif message.text[0:5].lower() == "poket":
         bot.send_message(message.chat.id, "Данный модуль еще в разработке")
+    elif message.text[0:4].lower() == "info":
+        bot.send_message(message.chat.id, info.info_computer(message.text))
     else:
         bot.send_message(message.chat.id, f"Я не знаю этой команды:\n{message.text}\n"
                                           f"для помощи напиши help")

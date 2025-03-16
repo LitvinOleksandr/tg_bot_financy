@@ -67,7 +67,7 @@ def manualy_add_to_db(array:list, month: int):
         shop.add_shop(
             shop_name=cell[0],
             amount=cell[1],
-            money_from=cell[2],
-            customer_id=cell[3],
-            created_at=create_day_to_db(month=month, day=cell[4])
+            money_from="card",
+            customer_id=596046280,
+            created_at=create_day_to_db(month=month, day=cell[2])
         )

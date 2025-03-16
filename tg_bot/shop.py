@@ -91,3 +91,6 @@ def get_total_spent_in_shop(cursor, month: str, year = "2025"):
 
     result = cursor.fetchone()  # Получаем одну строку
     return round(result[0], 2) if result[0] is not None else 0  # Если нет данных, вернуть 0
+
+
+print(message_shop(mes_text="shop info 3"))
