@@ -6,30 +6,35 @@ import info
 
 bot = telebot.TeleBot(config.TOKEN)
 
-@bot.message_handler(func=lambda message: message.chat.id in config.ACCESS_LIST)
+# Словарь команд
+COMMANDS = {
+    "add": lambda msg: shop.message_add(msg.text, msg.chat.id) or f"i don't understand {msg.text},\nuse help",
+    "shop": lambda msg: shop.message_shop(msg.text, msg.chat.id),
+    "auto": lambda _: "Данный модуль еще в разработке",
+    "help": lambda msg: help.help_message(msg.text),
+    "poket": lambda _: "Данный модуль еще в разработке",
+    "info": lambda msg: info.info_computer(msg.text),
+}
+
+@bot.message_handler(func=lambda message: message.text and message.chat.id in config.ACCESS_LIST)
 def handle_messages(message):
-    if message.text[0:3].lower() == "add":
-        if not shop.message_add(message.text, message.chat.id):
-            bot.send_message(message.chat.id, f"i don't understand {message.text},"
-                                              f"\nuse help")
-    elif message.text[0:4].lower() == "shop":
-        bot.send_message(message.chat.id, shop.message_shop(message.text, message.chat.id))
-    elif message.text[0:4].lower() == "auto":
-        bot.send_message(message.chat.id, "Данный модуль еще в разработке")
-    elif message.text[0:4].lower() == "help":
-        bot.send_message(message.chat.id, help.help_message(message.text))
-    elif message.text[0:5].lower() == "poket":
-        bot.send_message(message.chat.id, "Данный модуль еще в разработке")
-    elif message.text[0:4].lower() == "info":
-        bot.send_message(message.chat.id, info.info_computer(message.text))
-    else:
-        bot.send_message(message.chat.id, f"Я не знаю этой команды:\n{message.text}\n"
-                                          f"для помощи напиши help")
+    text = message.text.lower()
+
+    for command, func in COMMANDS.items():
+        if text.startswith(command):
+            bot.send_message(message.chat.id, func(message))
+            return
+
+    bot.send_message(message.chat.id, f"Я не знаю этой команды:\n{message.text}\nдля помощи напиши help")
 
 def start_bot() -> None:
-    print("Started tg bot")
-    bot.polling(none_stop=True)
-    print("Tg bot stopped")
+    print("Started TG bot")
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        print(f"Ошибка: {e}")
+    finally:
+        print("TG bot stopped")
 
 if __name__ == '__main__':
     start_bot()
