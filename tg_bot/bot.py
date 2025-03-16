@@ -8,7 +8,7 @@ bot = telebot.TeleBot(config.TOKEN)
 
 # Словарь команд
 COMMANDS = {
-    "add": lambda msg: shop.message_add(msg.text, msg.chat.id) or f"i don't understand {msg.text},\nuse help",
+    "add": lambda msg: shop.message_add(msg.text, msg.chat.id) or f"Мне не понятен запрос, {msg.text},\nиспользуй help add",
     "shop": lambda msg: shop.message_shop(msg.text, msg.chat.id),
     "auto": lambda _: "Данный модуль еще в разработке",
     "help": lambda msg: help.help_message(msg.text),

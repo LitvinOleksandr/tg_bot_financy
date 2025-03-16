@@ -1,13 +1,13 @@
 def help_message(message: str) -> str:
-    message = message.split()
-    if len(message) < 2:
-        return "Help <name>\nname: add, auto, poket, shop."
-    if message[1] == "add":
-        return (f"'add <shop_name> <amount>' - оплата картой."
-                f"\n'add <shop_name> <amount> cash' - оплата наличными."
-                f"\nНапример: add lidl 12,45. Разделение . или , не имеет значения.")
-    if message[1] == "auto":
-        return "Help auto"
-    if message[1] == "shop":
-        return "shop info <month_number>\nshop total <month_number>"
-    return "Help"
+    help_dict = {
+        "add": (
+            "'add <shop_name> <amount>' - оплата картой.\n"
+            "'add <shop_name> <amount> cash' - оплата наличными.\n"
+            "Например: add lidl 12,45. Разделение 12.45 или 12,45 не имеет значения."
+        ),
+        "info": "info temp",
+        "shop": "shop info <month_number>"
+    }
+
+    parts = message.lower().split()
+    return help_dict.get(parts[1], "Help") if len(parts) > 1 else "Help <name>\nname: add, shop, info."
