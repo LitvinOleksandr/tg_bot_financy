@@ -1,26 +1,22 @@
 import telebot
+import config
+import help
+import shop
 
-from config import TOKEN, ACCESS_LIST, load_names
-from help import help_message
-from shop import *
-from auto import *
-from poket import *
+bot = telebot.TeleBot(config.TOKEN)
 
-
-bot = telebot.TeleBot(TOKEN)
-
-@bot.message_handler(func=lambda message: message.chat.id in ACCESS_LIST)
+@bot.message_handler(func=lambda message: message.chat.id in config.ACCESS_LIST)
 def handle_messages(message):
     if message.text[0:3].lower() == "add":
-        if not message_add(message.text, message.chat.id):
+        if not shop.message_add(message.text, message.chat.id):
             bot.send_message(message.chat.id, f"i don't understand {message.text},"
                                               f"\nuse help")
     elif message.text[0:4].lower() == "shop":
-        bot.send_message(message.chat.id, message_shop(message.text, message.chat.id))
+        bot.send_message(message.chat.id, shop.message_shop(message.text, message.chat.id))
     elif message.text[0:4].lower() == "auto":
         bot.send_message(message.chat.id, "Данный модуль еще в разработке")
     elif message.text[0:4].lower() == "help":
-        bot.send_message(message.chat.id, help_message(message.text))
+        bot.send_message(message.chat.id, help.help_message(message.text))
     elif message.text[0:5].lower() == "poket":
         bot.send_message(message.chat.id, "Данный модуль еще в разработке")
     else:

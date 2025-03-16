@@ -1,6 +1,7 @@
+from typing import List
 import sqlite3
 from functools import wraps
-from shop import *
+import shop
 
 
 #decorator
@@ -44,10 +45,10 @@ def auto_makes_request(message: str) -> list:
 def from_list_to_str(data_input) -> str:
     text_spending_by_shop = ""
     for shop, total in data_input:
-        text_spending_by_shop += f"{shop} - {total}\n"
+        text_spending_by_shop += f"{shop} - {round(total, 2)}\n"
     return text_spending_by_shop
 
-def make_date_to_db(month: str, year: str) -> list[str]:
+def make_date_to_db(month: str, year: str) -> List[str]:
     if len(month) == 1:
         month = f"0{month}"
     start_date = f"{year}-{month}-01 00:00:00"
@@ -63,7 +64,7 @@ def create_day_to_db(month: int, day: int) -> str:
 
 def manualy_add_to_db(array:list, month: int):
     for cell in array:
-        add_shop(
+        shop.add_shop(
             shop_name=cell[0],
             amount=cell[1],
             money_from=cell[2],

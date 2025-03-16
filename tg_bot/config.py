@@ -1,3 +1,5 @@
+from typing import List
+
 __token_address = "token.txt"
 __access_tist_address = "access_list.txt"
 __file_with_names = "file_with_names.txt"
@@ -6,7 +8,7 @@ def load_token():
     with open(__token_address, "r") as file:
         return file.read().strip()
 
-def load_access_list() -> list[int]:
+def load_access_list() -> List[int]:
     with open(__access_tist_address, "r") as file:
         return [int(line.strip()) for line in file if line.strip().isdigit()]
 
