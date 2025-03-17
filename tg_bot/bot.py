@@ -14,17 +14,19 @@ COMMANDS = {
     "auto": lambda _: "Данный модуль еще в разработке",
     "help": lambda msg: help.help_message(msg.text),
     "poket": lambda _: "Данный модуль еще в разработке",
-    "info": lambda msg: info.info_computer(msg.text),
+    "info": lambda msg: info.info_manager(msg.text),
 }
 
 @bot.message_handler(func=lambda message: message.text and message.chat.id in config.ACCESS_LIST)
 def handle_messages(message):
     text = message.text.lower()
-
-    for command, func in COMMANDS.items():
-        if text.startswith(command):
-            bot.send_message(message.chat.id, func(message))
-            return
+    try:
+        for command, func in COMMANDS.items():
+            if text.startswith(command):
+                bot.send_message(message.chat.id, func(message))
+                return
+    except Exception as e:
+        bot.send_message(message.chat.id, f"Что то пошло не так, ошибка:\n{e}")
 
     bot.send_message(message.chat.id, f"Я не знаю этой команды:\n{message.text}\nдля помощи напиши help")
 
@@ -39,6 +41,11 @@ def start_bot():
             continue
         finally:
             print("TG bot stopped")
+
+def start_bot_for_coding():
+    print("Started TG bot")
+    bot.polling(none_stop=True, timeout=60)  # Увеличиваем таймаут
+    print("TG bot stopped")
 
 if __name__ == '__main__':
     start_bot()

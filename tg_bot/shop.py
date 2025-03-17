@@ -2,7 +2,7 @@ import datetime
 from datetime import datetime, timedelta, timezone
 import simple_function
 
-def message_add(mes_text: str, user_id: int) -> bool:
+def message_add(mes_text: str, user_id: int):
     if (mes_text[0:3].lower() == "add" and len(mes_text.split()) == 4
             or mes_text[0:3].lower() == "add" and len(mes_text.split()) == 3):
         mess = mes_text.split()
@@ -14,7 +14,7 @@ def message_add(mes_text: str, user_id: int) -> bool:
                 customer_id=user_id,
                 created_at=None
             )
-            return True
+            return f"{simple_function.replace_punkt_to_comma(mess[2])} € успешно добавлены в {mess[1]}"
     return False
 
 def message_shop(mes_text: str, user_id: int) -> str:
