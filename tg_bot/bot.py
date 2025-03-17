@@ -1,3 +1,4 @@
+import time
 import telebot
 import config
 import help
@@ -27,14 +28,17 @@ def handle_messages(message):
 
     bot.send_message(message.chat.id, f"Я не знаю этой команды:\n{message.text}\nдля помощи напиши help")
 
-def start_bot() -> None:
+def start_bot():
     print("Started TG bot")
-    try:
-        bot.polling(none_stop=True)
-    except Exception as e:
-        print(f"Ошибка: {e}")
-    finally:
-        print("TG bot stopped")
+    while True:
+        try:
+            bot.polling(none_stop=True, timeout=60)  # Увеличиваем таймаут
+        except Exception as e:
+            print(f"Ошибка: {e}")
+            time.sleep(5)  # Ждем 5 секунд перед повторным запуском
+            continue
+        finally:
+            print("TG bot stopped")
 
 if __name__ == '__main__':
     start_bot()
